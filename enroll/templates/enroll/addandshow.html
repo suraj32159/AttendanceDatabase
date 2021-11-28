@@ -1,0 +1,17 @@
+{% extends 'enroll/base.html' %}
+{% block content %}
+<div class="row">
+	<div class="col-md-3">
+	</div>
+    <div class="col-md-6">
+        <h4 class="text-center alert alert-info">Add Student Details</h4>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" class = "btn btn-success" value="Add">
+        <!-- <a href="/data.txt" download="download" class="btn btn-info">Download File Format</a> -->
+    </form>
+    <div class="col-md-3">
+	</div>
+</div>
+{% endblock content %}
