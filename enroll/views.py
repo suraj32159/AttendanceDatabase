@@ -20,3 +20,4 @@ def add_show(request):
 	
 	fm = StudentRegistration()
 	return render(request,'enroll/addandshow.html',{'form':fm})
+print('Hello')
