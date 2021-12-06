@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+#from enroll.models import User
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -120,6 +121,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+#loc = str(User.objects.get(os.name))
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
