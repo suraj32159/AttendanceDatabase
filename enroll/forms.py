@@ -6,9 +6,10 @@ from django.core import validators
 class StudentRegistration(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['name','enrollment_no','file_name']
+        fields = ['name','course','enrollment_no','file_name']
         widgets = {
             'name' : forms.TextInput(attrs={'class':'form-control'}),
+            'course' : forms.Select(attrs={'class': 'form-control'}),
             'enrollment_no' : forms.NumberInput(attrs={'class': 'form-control'}),
-            'file_name' : forms.ClearableFileInput(attrs={'multiple':'multiple','class':'form-control'})
+            'file_name' : forms.ClearableFileInput(attrs={'multiple':'multiple','class':'form-control','accept':'image/png, image/gif, image/jpeg'})
         }
