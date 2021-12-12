@@ -1,6 +1,15 @@
 {% extends 'enroll/base.html' %}
 {% block content %}
 {% load static %}
+
+{% if messages %}
+<ul class="messages" style="color: green;">
+    {% for message in messages %}
+    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+    {% endfor %}
+</ul>
+
+{% endif %}
 <div class="row">
 	<div class="col-md-5">
         <h4 class="text-center alert alert-info">Add Student Details</h4>
