@@ -10,7 +10,7 @@ import os
 def add_show(request):
 	if request.method == 'POST':
 		for f in request.FILES.getlist('file_name'):
-			User(name = request.POST.get('name'),enrollment_no = request.POST.get('enrollment_no'),file_name=f).save()
+			User(name = request.POST.get('name'),course=request.POST.get('course'),enrollment_no = request.POST.get('enrollment_no'),file_name=f).save()
 	
 	fm = StudentRegistration()
 	return render(request,'enroll/addandshow.html',{'form':fm})

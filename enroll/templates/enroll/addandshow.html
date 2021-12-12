@@ -1,15 +1,22 @@
 {% extends 'enroll/base.html' %}
 {% block content %}
+{% load static %}
 <div class="row">
 	<div class="col-md-3">
 	</div>
     <div class="col-md-6">
-        <h4 class="text-center alert alert-info">Add Student Details</h4>
+        <h4 class="text-center alert alert-info">Automated Attendance Registration</h4>
     <form action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {{form.as_p}}
         <input type="submit" class = "btn btn-success" value="Add">
         <!-- <a href="/data.txt" download="download" class="btn btn-info">Download File Format</a> -->
+        <p>
+        <br>
+        Example    
+        </p>
+        <img src="{% static 'enroll/images/ankan.png' %}" width="600" height="120">
+        <p></p>
     </form>
     <div class="col-md-3">
 	</div>
