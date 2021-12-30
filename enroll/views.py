@@ -72,10 +72,10 @@ def findencodings(Sname,course):
 	if file_exists:
 		# Load face encodings
 		with open(save_path_encodings, 'rb') as f:
-	  		known_faces = pickle.load(f)
+			known_faces = pickle.load(f)
 		# Load name
 		with open(save_path_names, 'rb') as f:
-	  		known_names = pickle.load(f)
+			known_names = pickle.load(f)
 		if Sname in known_names:
 			pass
 		else:
@@ -84,9 +84,9 @@ def findencodings(Sname,course):
 		known_names,known_faces = getEncodings(Sname,MODEL,path,known_faces,known_names)
 
 	with open(save_path_encodings, 'wb') as f:
-	     pickle.dump(known_faces, f)
+		pickle.dump(known_faces, f)
 	with open(save_path_names, 'wb') as f:
-	     pickle.dump(known_names, f)
+	    pickle.dump(known_names, f)
 
 def getEncodings(Sname,MODEL,path,known_faces,known_names):
 	myDict=[]
@@ -106,7 +106,7 @@ def success(request):
 
 def teachers_home(request):
 	if request.method == 'POST':
-		registerAttendance(request)
+		RegisterAttendance(request)
 		# return HttpResponse('successfully uploaded')
 
 
@@ -195,11 +195,11 @@ def registerAttendance(request):
 
 	# Load face encodings
 	with open(path_encodings, 'rb') as f:
-	  known_faces = pickle.load(f)
+		known_faces = pickle.load(f)
 
 	# Load face Encodings
 	with open(path_names, 'rb') as f:
-	  known_names = pickle.load(f)
+		known_names = pickle.load(f)
 
 	TOLERANCE = 0.5
 	# vid = cv2.VideoCapture(0)
@@ -212,60 +212,115 @@ def registerAttendance(request):
 	# Now let's loop over a folder of faces we want to label
 	# for filename in os.listdir(UNKNOWN_FACES_DIR):
 	  # Load image
-	  ret, frame = vid.read()
-	  image = frame
+		ret, frame = vid.read()
+		image = frame
 	  # image = cv2.imread(f'{UNKNOWN_FACES_DIR}/{filename}')
 	  # image = cv2.resize(image,(0,0),None,1,1)
 
-	  locations = []
-	  encodings = []
-	  face_det = RetinaFace.detect_faces(image)
-	  match = 0
-	  for key in face_det.keys():
-	    identity = face_det[key]
-	    facial_area = identity["facial_area"]
-	    x, y, w, h = identity["facial_area"]
+		locations = []
+		encodings = []
+		face_det = RetinaFace.detect_faces(image)
+		match = 0
+		for key in face_det.keys():
+			identity = face_det[key]
+			facial_area = identity["facial_area"]
+			x, y, w, h = identity["facial_area"]
 	    # cropImg = image[y - 20:h + 20,x - 20:w + 20]
-	    cropImg = image[y:h,x:w]
-	    cropImg = cv2.pyrUp(cropImg)
-	    cropImg = cv2.detailEnhance(cropImg, sigma_s=10, sigma_r=0.15)
-	    temp = DeepFace.represent(cropImg, model_name=MODEL, model=DeepFace.build_model(MODEL), enforce_detection=False, detector_backend='retinaface', align=True, normalization='base')
-	    encodings.append(temp)
+			cropImg = image[y:h,x:w]
+			cropImg = cv2.pyrUp(cropImg)
+			cropImg = cv2.detailEnhance(cropImg, sigma_s=10, sigma_r=0.15)
+			temp = DeepFace.represent(cropImg, model_name=MODEL, model=DeepFace.build_model(MODEL), enforce_detection=False, detector_backend='retinaface', align=True, normalization='base')
+			encodings.append(temp)
 
 	    #cv2.rectangle(image, (facial_area[2] + 10, facial_area[3] + 10), (facial_area[0] - 10, facial_area[1] - 10), (255, 255, 255), 2)
 	    #cv2.putText(image, str(match), (facial_area[2] - 50, facial_area[3]), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (57, 255, 20), FONT_THICKNESS)
-	    match = match + 1
-	    locations.append(facial_area)
+			match = match + 1
+			locations.append(facial_area)
 	  
 
-	  for face_encoding, face_location in zip(encodings, locations):
-	    results = findCosineDistance(known_faces, face_encoding, TOLERANCE)
-	    match = 'UnKnown'
+		for face_encoding, face_location in zip(encodings, locations):
+			results = findCosineDistance(known_faces, face_encoding, TOLERANCE)
+			match = 'UnKnown'
 	    # print(results)
-	    if True in results:  # If at least one is true, get a name of first of found labels
-	      match = known_names[results.index(True)]
-	      markAttendance(match,request)
+			if True in results:  # If at least one is true, get a name of first of found labels
+				match = known_names[results.index(True)]
+				markAttendance(match,request)
 
 	    # Get color by name using our fancy function
-	    color = name_to_color(match)
+			color = name_to_color(match)
 	    # Each location contains positions in order: top, right, bottom, left
-	    top_left = (face_location[2], face_location[3])
-	    bottom_right = (face_location[0], face_location[1])
-	    cv2.rectangle(image, top_left, bottom_right, color, FRAME_THICKNESS)
+			top_left = (face_location[2], face_location[3])
+			bottom_right = (face_location[0], face_location[1])
+			cv2.rectangle(image, top_left, bottom_right, color, FRAME_THICKNESS)
 	    # This time we use bottom in both corners - to start from bottom and move 50 pixels down
-	    top_left = (face_location[2], face_location[3])
-	    bottom_right = (face_location[0], face_location[1] + 22)
-	    cv2.putText(image, match, (face_location[0] - 30 , face_location[1] - 10 ), cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, FONT_THICKNESS)
+			top_left = (face_location[2], face_location[3])
+			bottom_right = (face_location[0], face_location[1] + 22)
+			cv2.putText(image, match, (face_location[0] - 30 , face_location[1] - 10 ), cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, FONT_THICKNESS)
 	  # Show image
-	  cv2.imshow("Attendance Box",image)
+		cv2.imshow("Attendance Box",image)
 	  # output.write(image)
-	  if cv2.waitKey(1) & 0xFF == ord('q'):
-	  	break
+		if cv2.waitKey(1) & 0xFF == ord('q'):
+			break
 
 	vid.release()
 	# output.release()
 	# Destroy all the windows
 	cv2.destroyAllWindows()
+
+
+def RegisterAttendance(request):
+	teachers_name = request.POST.get('teachers_name')
+	subject=request.POST.get('subject')
+	course = request.POST.get('course')
+	sem = request.POST.get('sem')
+	batch_year=request.POST.get('course')
+
+	path_encodings = settings.MEDIA_ROOT+"/Encodings/"+str(course)+".dat"
+	path_names = settings.MEDIA_ROOT+"/Encodings/"+str(course)+'_names.dat'
+
+	FRAME_THICKNESS = 3
+	FONT_THICKNESS = 2
+	MODEL = 'Facenet'
+
+	# Load face encodings
+	with open(path_encodings, 'rb') as f:
+		known_faces = pickle.load(f)
+
+	# Load face Encodings
+	with open(path_names, 'rb') as f:
+		known_names = pickle.load(f)
+
+	TOLERANCE = 0.5
+	UNKNOWN_FACES_DIR = settings.MEDIA_ROOT+"/Unknown Faces"
+	for filename in os.listdir(UNKNOWN_FACES_DIR):
+ 		# Load image
+		image = cv2.imread(f'{UNKNOWN_FACES_DIR}/{filename}')
+  	
+		locations = []
+		encodings = []
+		face_det = RetinaFace.detect_faces(image)
+		match = 0
+		for key in face_det.keys():
+			identity = face_det[key]
+			facial_area = identity["facial_area"]
+			x, y, w, h = identity["facial_area"]
+			# cropImg = image[y - 20:h + 20,x - 20:w + 20]
+			cropImg = image[y:h,x:w]
+			cropImg = cv2.pyrUp(cropImg)
+			cropImg = cv2.detailEnhance(cropImg, sigma_s=10, sigma_r=0.15)
+			temp = DeepFace.represent(cropImg, model_name=MODEL, model=DeepFace.build_model(MODEL), enforce_detection=False, detector_backend='retinaface', align=True, normalization='base')
+			encodings.append(temp)
+			match = match + 1
+			locations.append(facial_area)
+  
+
+		for face_encodings, face_location in zip(encodings, locations):
+			results = findCosineDistance(known_faces, face_encodings, TOLERANCE)
+			match = 'UnKnown'
+    		# print(results)
+			if True in results:  # If at least one is true, get a name of first of found labels
+				match = known_names[results.index(True)]
+				markAttendance(match,request)
 
 
 from django.views.decorators import gzip
@@ -284,24 +339,24 @@ def Home(request):
 
 #to capture video class
 class VideoCamera(object):
-    def __init__(self):
-    	self.videoPath = settings.MEDIA_ROOT+"/VideoDemo/output2.avi"
-    	self.video = cv2.VideoCapture(self.videoPath)
+	def __init__(self):
+		self.videoPath = settings.MEDIA_ROOT+"/VideoDemo/output2.avi"
+		self.video = cv2.VideoCapture(self.videoPath)
     	# self.video = cv2.VideoCapture(0)
-    	(self.grabbed, self.frame) = self.video.read()
-    	threading.Thread(target=self.update, args=()).start()
+		(self.grabbed, self.frame) = self.video.read()
+		threading.Thread(target=self.update, args=()).start()
 
-    def __del__(self):
-        self.video.release()
+	def __del__(self):
+		self.video.release()
 
-    def get_frame(self):
-        image = self.frame
-        _, jpeg = cv2.imencode('.jpg', image)
-        return jpeg.tobytes()
+	def get_frame(self):
+		image = self.frame
+		_, jpeg = cv2.imencode('.jpg', image)
+		return jpeg.tobytes()
 
-    def update(self):
-        while True:
-            (self.grabbed, self.frame) = self.video.read()
+	def update(self):
+		while True:
+			(self.grabbed, self.frame) = self.video.read()
 
 def gen(camera):
     while True:
