@@ -19,5 +19,9 @@ from enroll import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',views.add_show,name='addandshow')
+    path('',views.add_show,name='addandshow'),
+    path('teachers_home',views.teachers_home,name='teachers_home'),
+    path('home',views.Home,name='Home'),
+    path('report',views.genrate_report,name='Report'),
+    path('export/csv/', views.export_users_csv, name='export_users_csv')
 ]

@@ -1,0 +1,18 @@
+{% extends 'enroll/base.html' %}
+{% block content %}
+{% load static %}
+<div class="row">
+    <div class="col-md-3">
+    </div>
+    <div class="col-md-6">
+        <h4 class="text-center alert alert-info">Mark Attendance</h4>
+        <form action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" class = "btn btn-success" value="Mark Attendance">
+        </form>
+    </div>
+    <div class="col-md-3">
+    </div>
+</div>
+{% endblock content %}

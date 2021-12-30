@@ -1,0 +1,42 @@
+{% extends 'enroll/base.html' %}
+{% block content %}
+{% load static %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Teachers Name</th>
+      <th scope="col">Student Name</th>
+      <th scope="col">Subject</th>
+      <th scope="col">Course</th>
+      <th scope="col">Semester</th>
+      <th scope="col">Batch Year</th>
+      <th scope="col">Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for q in details %}
+	   <tr>
+	       <td>{{q.teachers_name}}</td>
+	       <td>{{q.student_name}}</td>
+	       <td>{{q.subject}}</td>
+	       <td>{{q.course}}</td>
+	       <td>{{q.sem}}</td>
+	       <td>{{q.batch_year}}</td>
+	       <td>{{q.date}}</td>
+	   </tr>
+   {% endfor %}
+  </tbody>
+</table>
+
+<div class="row">
+    <div class="col-md-6">
+    </div>
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-2">
+    	<a class="btn btn-primary" href="{% url 'export_users_csv' %}" role="button">Export all Details</a>
+    </div>
+</div>
+
+{% endblock content %}
+
