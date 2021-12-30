@@ -37,7 +37,6 @@ def add_show(request):
 		#save_path = settings.MEDIA_ROOT +"/"+str(request.POST.get('course')) 
 		save_path="../media/"+str(request.POST.get('course'))+"/" +str(request.POST.get('name'))
 		findencodings(request.POST.get('name'),request.POST.get('course'))
-		return HttpResponse(save_path)
 
 	fm = StudentRegistration()
 	return render(request,'enroll/addandshow.html',{'form':fm})
@@ -55,8 +54,6 @@ def export_users_csv(request):
     users = User_attendance_details.objects.all().values_list('teachers_name', 'student_name', 'subject', 'course','sem','batch_year','date')
     for user in users:
         writer.writerow(user)
-
-    return response
 
     return response
 
@@ -170,11 +167,13 @@ def markAttendance(name,request):
 	subject=request.POST.get('subject')
 	course = request.POST.get('course')
 	sem = request.POST.get('sem')
-	batch_year=request.POST.get('course')
-	userAttendance = User_attendance_details.objects.get(teachers_name=teachers_name,student_name=name,subject=subject,course=course,sem=sem,batch_year=batch_year,date=today)
+	batch_year=request.POST.get('batch_year')
 
-	# if len(userAttendance) == 0:
-	User_attendance_details(teachers_name=teachers_name,student_name=name,subject=subject,course=course,sem=sem,batch_year=batch_year,date=today).save()
+
+	if User_attendance_details.objects.filter(teachers_name=teachers_name,student_name=name,subject=subject,course=course,sem=sem,batch_year=batch_year,date=today).exists():
+		pass
+	else:
+		User_attendance_details(teachers_name=teachers_name,student_name=name,subject=subject,course=course,sem=sem,batch_year=batch_year,date=today).save()
 
 	return True
 
