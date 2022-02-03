@@ -1,0 +1,10 @@
+Using Rose-Youtu Face Liveness Detection dataset (Rose-Youtu). 
+https://www.ntu.edu.sg/rose/research-focus/multimedia-forensics-biometrics/face-liveness-detection
+
+
+#https://github.com/imironica/liveness
+https://github.com/DoubangoTelecom/FaceLivenessDetection-SDK
+https://github.com/prabhat-123/Face_Antispoofing_System
+
+Available Datasets
+https://github.com/RizhaoCai/Awesome-FAS#databases
